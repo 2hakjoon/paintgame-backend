@@ -23,11 +23,13 @@ const clean = () => del(["build"]);
 
 const webserver = () => gulp.src("build").pipe(ws({livereload:true, open:true}));
 
+const img = () => gulp.src(routes.img.src).pipe(gimage()).pipe(gulp.dest(routes.img.dest));
+
 const watch = () => {
     gulp.watch(routes.pug.watch, pug);
+    gulp.watch(routes.img.src, img);
 };
 
-const img = () => gulp.src(routes.img.src).pipe(image()).pipe(gulp.dest(routes.img.dest));
 
 const prepare = gulp.series([clean, img]);
 
