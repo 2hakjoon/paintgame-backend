@@ -1,5 +1,5 @@
 {
-  "name": "paintgame_backend",
+  "name": "js_express",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HAKJOON0223/paintgame_backend.git"
+    "url": "git+https://github.com/HAKJOON0223/js_express.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/HAKJOON0223/paintgame_backend/issues"
+    "url": "https://github.com/HAKJOON0223/js_express/issues"
   },
-  "homepage": "https://github.com/HAKJOON0223/paintgame_backend#readme",
+  "homepage": "https://github.com/HAKJOON0223/js_express#readme",
   "dependencies": {
     "express": "^4.17.1"
   },
