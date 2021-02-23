@@ -1,4 +1,4 @@
-const commend = {
+const commends = {
     setNickname : "setNickname",
     newUser : "newUser",
     disconnect : "disconnect",
@@ -17,4 +17,4 @@ const commend = {
     gameStarting:"gameStarting",
 }
 
-export default commend
+export default commends

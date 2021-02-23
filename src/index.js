@@ -4,6 +4,7 @@ import socketIO from 'socket.io';
 import logger from 'morgan';
 import cors from 'cors';
 import commend from './commend';
+import {socketController} from './socket/socketEvents';
 
 // localhost 포트 설정
 const port = 4000;
@@ -24,19 +25,6 @@ const io = new socketIO.Server(server, {
     credentials: true
   }
 });
-
-// socketio 문법
-io.on('connection', socket => {
-  socket.emit('setCommend', commend);
-
-	console.log('User connected');
-	socket.on('disconnect', () => {
-		console.log('User disconnect');
-	});
-	socket.on('init', data => {
-    console.log(data.name)
-    socket.emit('welcome', 'message: ' + data.name);
-  });
-});
+io.on('connection', (socket) => socketController(socket, io));
 
 server.listen(port, () => console.log(`Listening on http://localhost${port}`))
