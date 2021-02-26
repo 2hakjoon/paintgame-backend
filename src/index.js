@@ -3,7 +3,7 @@ import http from 'http';
 import socketIO from 'socket.io';
 import logger from 'morgan';
 import cors from 'cors';
-import commend from './commend';
+import commend from './socket/commend';
 import {socketController} from './socket/socketEvents';
 
 // localhost 포트 설정

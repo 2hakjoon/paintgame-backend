@@ -1,4 +1,4 @@
-import commends from "../commend";
+import commends from "./commend";
 
 export const socketController = (socket, io) => {
     console.log(io)
@@ -16,12 +16,17 @@ export const socketController = (socket, io) => {
     });
 
     socket.on(commends.beginPath, ({x, y})=>{
-        console.log({x,y})
         socket.broadcast.emit(commends.beganPath, {x, y})
     });
 
     socket.on(commends.strokePath, ({x, y , color})=>{
-        console.log({x,y, color})
         socket.broadcast.emit(commends.strokedPath, {x, y, color})
     });
+
+    socket.on(commends.fill, (color)=>{
+        socket.broadcast.emit(commends.fill, {color})
+    });
+    socket.on(commends.sendMsg, (data)=>{
+        socket.broadcast.emit(commends.newMsg, {data})
+    })
 }
