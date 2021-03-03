@@ -1,20 +1,18 @@
 import commends from "./commend";
 
-export const socketController = (socket, io) => {
-    console.log(io)
-    socket.emit('setCommend', commends);
+let userList = [];
+const Color = "red";
 
-    console.log('User connected');
+export const socketController = (socket, io) => {
+    socket.on('setNickname', (data) => {
+        console.log(data)
+        socket.emit(commends.nicknameConfirm, Color);
+    });
 
     socket.on('disconnect', () => {
         console.log('User disconnect');
     });
     
-    socket.on('init', data => {
-        console.log(data.name);
-        socket.emit('welcome', 'message: ' + data.name);
-    });
-
     socket.on(commends.beginPath, ({x, y})=>{
         socket.broadcast.emit(commends.beganPath, {x, y})
     });
