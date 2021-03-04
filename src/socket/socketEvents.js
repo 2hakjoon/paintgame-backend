@@ -1,12 +1,17 @@
+import { rndColor } from "../Colors";
 import commends from "./commend";
 
 let userList = [];
-const Color = "red";
-
 export const socketController = (socket, io) => {
     socket.on('setNickname', (data) => {
-        console.log(data)
-        socket.emit(commends.nicknameConfirm, Color);
+        const color = rndColor();
+        if(userList)
+        userList.push({
+            userId : data,
+            userColor : color
+        })
+        console.log(userList)
+        socket.emit(commends.nicknameConfirm, color);
     });
 
     socket.on('disconnect', () => {
