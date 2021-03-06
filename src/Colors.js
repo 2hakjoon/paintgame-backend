@@ -20,7 +20,6 @@ const Colors = [
 'gray',
 'white',
 'maroon',
-'red',
 'purple',
 'fuchsia',
 'green',
