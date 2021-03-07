@@ -25,7 +25,7 @@ const gameEnd = (io) => {
 const countDown = (io, sec) => {
     let cnt = sec;
     const count = setInterval(()=>{
-        io.emit(commends.countDown, {data : {...notice.freeNotice, text: cnt}})
+        io.emit(commends.newMsg, {data : {...notice.freeNotice, text: cnt}})
         cnt = cnt-1;
         if(cnt == 0){
             clearInterval(count);
