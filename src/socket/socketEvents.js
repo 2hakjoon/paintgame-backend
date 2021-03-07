@@ -15,7 +15,6 @@ const gameStart = (io) => {
     io.emit(commends.gameStarted, {data : notice.gameStart})
     setTimeout(()=>countDown(io, 3), 1000);
     setTimeout(()=>selcetPainter(io), 5000)
-    console.log(rndWord());
 }
 
 const gameEnd = (io) => {
@@ -36,8 +35,19 @@ const countDown = (io, sec) => {
 }
 
 const selcetPainter = (io) => {
+    const word = rndWord();
     const painter = userList[Math.floor(Math.random() * userList.length)];
-    io.to(painter.socket).emit(commends.painterNotif, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}, word:rndWord()})
+    userList.map((user)=>{
+        if(user.socket === painter.socket){
+            io.to(painter.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}})
+            io.to(painter.socket).emit(commends.painterNotif, word)
+        }
+        else{
+            io.to(user.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "정답을 맞춰보세요!"}, word:(rndWord().length+1)})
+            io.to(user.socket).emit(commends.painterNotif, `${word.length}글자`)
+        }
+    })
+    
 }
 
 export const socketController = (socket, io) => {
