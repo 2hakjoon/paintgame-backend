@@ -1,5 +1,14 @@
 let usedColor = [];
 
+export const unlockColor = (color) =>{
+    usedColor.map((clr,index)=>{
+        if(clr === color){
+            usedColor.splice(index,1);
+        }
+    })
+}
+
+
 export const rndColor = () => {
     let color = "";
     let check = true;

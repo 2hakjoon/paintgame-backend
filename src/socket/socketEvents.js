@@ -1,5 +1,6 @@
 import { Socket } from "socket.io";
 import { rndColor } from "../Colors";
+import { rndWord } from "../Words";
 import commends from "./commend";
 import { notice } from "./gameNotice";
 
@@ -18,6 +19,7 @@ let userList = [
 const gameStart = (io) => {
     io.emit(commends.gameStarted, {data : notice.gameStart})
     setTimeout(()=>countDown(io, 3), 1000);
+    console.log(rndWord())
 }
 
 const countDown = (io, sec) => {
@@ -29,29 +31,32 @@ const countDown = (io, sec) => {
             clearInterval(count);
         }
     }, 1000);
+
 }
 
 export const socketController = (socket, io) => {
     socket.on(commends.setNickname, (data) => {
+        const userId = data
         const color = rndColor();
         if(userList)
         userList.push({
-            userId : data,
+            userId : userId,
             userColor : color,
             socket : socket.id
         })
         console.log(userList)
         socket.emit(commends.nicknameConfirm, color);
-        socket.broadcast.emit(commends.playerUpdate, {userId : data, color})
+        socket.broadcast.emit(commends.playerUpdate, {data : {...notice.freeNotice, text: `${userId}님이 입장하셨습니다.`}})
         
         if(userList.length >= 2 && gameState==false){
-            gameStart(io);
+            setTimeout(()=>gameStart(io), 500);
         }
     });
 
     socket.on(commends.disconnect, () => {
         userList.map((user, index)=>{
             if(user.socket == socket.id){
+                unlockWord(user.userColor)
                 userList.splice(index, 1);
             }
         });
