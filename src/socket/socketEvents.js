@@ -14,7 +14,8 @@ const gameStart = (io) => {
     gameState = true;
     io.emit(commends.gameStarted, {data : notice.gameStart})
     setTimeout(()=>countDown(io, 3), 1000);
-    setTimeout(()=>selcetPainter(io), 5000)
+    setTimeout(()=>selcetPainter(io), 5000);
+    setTimeout(()=>countDown(io, 60), 4000);
 }
 
 const gameEnd = (io) => {
@@ -25,7 +26,13 @@ const gameEnd = (io) => {
 const countDown = (io, sec) => {
     let cnt = sec;
     const count = setInterval(()=>{
-        io.emit(commends.newMsg, {data : {...notice.freeNotice, text: cnt}})
+        if(sec===60){
+            io.emit(commends.countDown, `남은시간 : ${cnt} 초`)
+        }
+        else{
+            io.emit(commends.newMsg, {data : {...notice.freeNotice, text: cnt}})
+        }
+
         cnt = cnt-1;
         if(cnt == 0){
             clearInterval(count);
@@ -40,11 +47,11 @@ const selcetPainter = (io) => {
     userList.map((user)=>{
         if(user.socket === painter.socket){
             io.to(painter.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}})
-            io.to(painter.socket).emit(commends.painterNotif, word)
+            io.to(painter.socket).emit(commends.painterNotif, `제시어 : ${word}`)
         }
         else{
             io.to(user.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "정답을 맞춰보세요!"}, word:(rndWord().length+1)})
-            io.to(user.socket).emit(commends.painterNotif, `${word.length}글자`)
+            io.to(user.socket).emit(commends.painterNotif, `제시어 : ${word.length}글자`)
         }
     })
     
