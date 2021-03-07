@@ -1,25 +1,26 @@
 import { Socket } from "socket.io";
-import { rndColor } from "../Colors";
+import { rndColor, unlockColor } from "../Colors";
 import { rndWord } from "../Words";
 import commends from "./commend";
 import { notice } from "./gameNotice";
 
 
 let gameState = false;
-let userList = [
-    {
-    userId: 'sag',
-    userColor: 'violet',
-    socket: 'XPMWtaGuYfHyTy15AAAj'
-} 
-];
+let userList = [];
 
 
 
 const gameStart = (io) => {
+    gameState = true;
     io.emit(commends.gameStarted, {data : notice.gameStart})
     setTimeout(()=>countDown(io, 3), 1000);
-    console.log(rndWord())
+    setTimeout(()=>selcetPainter(io), 5000)
+    console.log(rndWord());
+}
+
+const gameEnd = (io) => {
+    gameState = false;
+    io.emit(commends.gameEnded, {data : notice.gameEnd})
 }
 
 const countDown = (io, sec) => {
@@ -32,6 +33,11 @@ const countDown = (io, sec) => {
         }
     }, 1000);
 
+}
+
+const selcetPainter = (io) => {
+    const painter = userList[Math.floor(Math.random() * userList.length)];
+    io.to(painter.socket).emit(commends.painterNotif, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}, word:rndWord()})
 }
 
 export const socketController = (socket, io) => {
@@ -56,8 +62,11 @@ export const socketController = (socket, io) => {
     socket.on(commends.disconnect, () => {
         userList.map((user, index)=>{
             if(user.socket == socket.id){
-                unlockWord(user.userColor)
+                unlockColor(user.userColor)
                 userList.splice(index, 1);
+            }
+            if(userList.length < 2 && gameState==true){
+                setTimeout(()=>gameEnd(io), 500);
             }
         });
     });
