@@ -7,7 +7,7 @@ import { notice } from "./gameNotice";
 
 let gameState = false;
 let userList = [];
-
+let word = "";
 
 
 const gameStart = (io) => {
@@ -18,9 +18,13 @@ const gameStart = (io) => {
     setTimeout(()=>countDown(io, 60), 4000);
 }
 
-const gameEnd = (io) => {
+const gameEnd = (io, user) => {
     gameState = false;
-    io.emit(commends.gameEnded, {data : notice.gameEnd})
+    io.emit(commends.countDown, ``)
+    io.emit(commends.painterNotif, ``)
+    io.emit(commends.newMsg, {data : {...notice.answered, text: `${user}님이 정답을 맞추셨습니다!` }})
+
+    scoreBoard(io);
 }
 
 const countDown = (io, sec) => {
@@ -34,7 +38,8 @@ const countDown = (io, sec) => {
         }
 
         cnt = cnt-1;
-        if(cnt == 0){
+        if((cnt == 0) || (gameState == false)){
+            io.emit(commends.countDown, ``)
             clearInterval(count);
         }
     }, 1000);
@@ -42,7 +47,7 @@ const countDown = (io, sec) => {
 }
 
 const selcetPainter = (io) => {
-    const word = rndWord();
+    word = rndWord();
     const painter = userList[Math.floor(Math.random() * userList.length)];
     userList.map((user)=>{
         if(user.socket === painter.socket){
@@ -57,6 +62,10 @@ const selcetPainter = (io) => {
     
 }
 
+const scoreBoard = (io) => {
+    io.emit(commends.userList, userList)
+}
+
 export const socketController = (socket, io) => {
     socket.on(commends.setNickname, (data) => {
         const userId = data
@@ -65,12 +74,13 @@ export const socketController = (socket, io) => {
         userList.push({
             userId : userId,
             userColor : color,
-            socket : socket.id
+            socket : socket.id,
+            score : 0
         })
         console.log(userList)
         socket.emit(commends.nicknameConfirm, color);
         socket.broadcast.emit(commends.playerUpdate, {data : {...notice.freeNotice, text: `${userId}님이 입장하셨습니다.`}})
-        
+        scoreBoard(io);
         if(userList.length >= 2 && gameState==false){
             setTimeout(()=>gameStart(io), 500);
         }
@@ -82,6 +92,7 @@ export const socketController = (socket, io) => {
                 unlockColor(user.userColor)
                 userList.splice(index, 1);
             }
+            scoreBoard(io);
             if(userList.length < 2 && gameState==true){
                 setTimeout(()=>gameEnd(io), 500);
             }
@@ -101,5 +112,9 @@ export const socketController = (socket, io) => {
     });
     socket.on(commends.sendMsg, (data)=>{
         socket.broadcast.emit(commends.newMsg, {data})
+        console.log(data)
+        if(word === data.text){
+            gameEnd(io, data.user);
+        }
     })
 }
