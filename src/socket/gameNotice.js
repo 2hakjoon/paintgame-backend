@@ -1,5 +1,5 @@
 const announcer = "-진행자-";
-const color = "red"
+const color = "red";
 
 export const notice = {
     freeNotice : {user : announcer, color : color},
