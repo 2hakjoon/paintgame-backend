@@ -77,5 +77,5 @@ const assets = gulp.series([pug, styles, js]);
 
 const postDev = gulp.series([webserver, watch]);
 
-export const build = gulp.series([prepare, assets, postDev]);
+export const dev = gulp.series([prepare, assets, postDev]);
 //export const build = gulp.series([prepare, assets]);
