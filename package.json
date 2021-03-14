@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/HAKJOON0223/paintgame_backend2#readme",
   "dependencies": {
-    "babel-cli": "^6.26.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "http": "0.0.1-security",
