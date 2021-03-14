@@ -29,8 +29,8 @@ const routes = {
     },
     js : {
         watch : "src/js/**/*.js",
-        src: "src/js/main.js",
-        dest: "bulid/js"
+        src: "src/index.js",
+        dest: "build/js"
     }
 }
 
@@ -43,7 +43,7 @@ const webserver = () => {
     .pipe(ws({livereload:true, open:true}))
 };
 
-const js = () => gulp.src(routes.js.src).pipe(brom({
+const js = () => gulp.src(routes.js.src, {allowEmpty:true}).pipe(brom({
     transform : [
         babelify.configure({ presets : ['@babel/preset-env']}),
         ["uglifyify", {global:true}]
@@ -57,7 +57,7 @@ const img = () =>
 
 
 const styles = () => 
-    gulp.src(routes.scss.src)
+    gulp.src(routes.scss.src, {allowEmpty:true})
     .pipe(sass().on("error", sass.logError))
     .pipe(autop())
     .pipe(miniCSS())
@@ -78,3 +78,4 @@ const assets = gulp.series([pug, styles, js]);
 const postDev = gulp.series([webserver, watch]);
 
 export const dev = gulp.series([prepare, assets, postDev]);
+export const build = gulp.series([prepare, assets]);

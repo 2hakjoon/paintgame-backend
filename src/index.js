@@ -10,8 +10,13 @@ import {socketController} from './socket/socketEvents';
 const port = 4000;
 
 const app = express();
+app.set("view engine", "pug");
 app.use(cors());
 app.use(logger('dev'));
+
+app.get('/', (req, res) => {
+  res.send('here is back end :(');
+});
 
 // server instance
 const server = http.createServer(app);

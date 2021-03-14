@@ -91,7 +91,6 @@ export const socketController = (socket, io) => {
             socket : socket.id,
             score : 0
         })
-        console.log(userList)
         socket.emit(commends.nicknameConfirm, color);
         socket.broadcast.emit(commends.playerUpdate, {data : {...notice.freeNotice, text: `${userId}님이 입장하셨습니다.`}})
         scoreBoard(io);
