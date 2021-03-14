@@ -26,8 +26,8 @@ const gameEnd = (io, user) => {
     io.emit(commends.painterNotif, ``)
     if(user!==undefined){
         io.emit(commends.newMsg, {data : {...notice.answered, text: `${user}님이 정답을 맞추셨습니다!` }})
-        io.emit(commends.gameEnded, ``);
     }
+    io.emit(commends.gameEnded, ``);
     scoreBoard(io);
     setTimeout(()=>gameStart(io), 2000);
 }
