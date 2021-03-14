@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build-babel": "babel -d ./build ./src -s",
+    "clean": "rm -rf build && mkdir build",
+    "build": "npm run clean && npm run build-babel",
+    "start": "npm run build && node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node src/index ",
     "start-dev": "nodemon --exec babel-node src/index.js --watch src/"
   },
   "repository": {
