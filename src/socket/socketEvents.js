@@ -26,6 +26,7 @@ const gameEnd = (io, user) => {
     io.emit(commends.painterNotif, ``)
     if(user!==undefined){
         io.emit(commends.newMsg, {data : {...notice.answered, text: `${user}님이 정답을 맞추셨습니다!` }})
+        io.emit(commends.gameEnded, ``);
     }
     scoreBoard(io);
     setTimeout(()=>gameStart(io), 2000);
@@ -62,12 +63,14 @@ const selcetPainter = (io) => {
         const painter = userList[Math.floor(Math.random() * userList.length)];
         userList.map((user)=>{
             if(user.socket === painter.socket){
-                io.to(painter.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}})
-                io.to(painter.socket).emit(commends.painterNotif, `제시어 : ${word}`)
+                io.to(painter.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}});
+                io.to(painter.socket).emit(commends.painterNotif, `제시어 : ${word}`);
+                io.to(painter.socket).emit(commends.enablePaint, '')
             }
             else{
                 io.to(user.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "정답을 맞춰보세요!"}, word:(rndWord().length+1)})
                 io.to(user.socket).emit(commends.painterNotif, `제시어 : ${word.length}글자`)
+                io.to(user.socket).emit(commends.disablePaint, ``)
             }
         })
     }
@@ -126,7 +129,6 @@ export const socketController = (socket, io) => {
     });
     socket.on(commends.sendMsg, (data)=>{
         socket.broadcast.emit(commends.newMsg, {data})
-        console.log(data.user)
         if(word === data.text){
             userList.map((user)=>{
                 if(user.userId === data.user){
