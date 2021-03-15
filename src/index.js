@@ -7,7 +7,7 @@ import commend from './socket/commend';
 import {socketController} from './socket/socketEvents';
 
 // localhost 포트 설정
-const port = 8000;
+const port = process.env.PORT || 80;
 
 const app = express();
 app.set("view engine", "pug");
