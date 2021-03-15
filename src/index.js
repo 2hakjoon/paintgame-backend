@@ -24,7 +24,7 @@ const server = http.createServer(app);
 // socketio 생성후 서버 인스턴스 사용
 const io = new socketIO.Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://priceless-hoover-994589.netlify.app",
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
