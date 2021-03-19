@@ -1,3 +1,4 @@
+require("dotenv").config()
 import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
@@ -24,7 +25,7 @@ const server = http.createServer(app);
 // socketio 생성후 서버 인스턴스 사용
 const io = new socketIO.Server(server, {
   cors: {
-    origin: "https://priceless-hoover-994589.netlify.app",
+    origin: process.env.DEV_FRONT||"https://priceless-hoover-994589.netlify.app",
     methods: ["GET", "POST"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -32,4 +33,4 @@ const io = new socketIO.Server(server, {
 });
 io.on('connection', (socket) => socketController(socket, io));
 
-server.listen(port, () => console.log(`Listening on http://localhost${port}`))
+server.listen(port, () => console.log(`Listening on http://localhost${port}`));

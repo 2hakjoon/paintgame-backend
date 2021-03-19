@@ -136,5 +136,8 @@ export const socketController = (socket, io) => {
             })
             gameEnd(io, data.user);
         }
+    });
+    socket.on(commends.drawDot, (data)=>{
+        socket.broadcast.emit(commends.drawDot, {data})
     })
 }
