@@ -65,12 +65,12 @@ const selcetPainter = (io) => {
             if(user.socket === painter.socket){
                 io.to(painter.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "당신이 그릴 차례입니다."}});
                 io.to(painter.socket).emit(commends.painterNotif, `제시어 : ${word}`);
-                io.to(painter.socket).emit(commends.enablePaint, '')
+                io.to(painter.socket).emit(commends.enablePaint, '');
             }
             else{
                 io.to(user.socket).emit(commends.newMsg, {data : {...notice.freeNotice, text: "정답을 맞춰보세요!"}, word:(rndWord().length+1)})
                 io.to(user.socket).emit(commends.painterNotif, `제시어 : ${word.length}글자`)
-                io.to(user.socket).emit(commends.disablePaint, ``)
+                io.to(user.socket).emit(commends.disablePaint, ``);
             }
         })
     }
