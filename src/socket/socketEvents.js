@@ -113,9 +113,7 @@ export const socketController = (socket, io) => {
             scoreBoard(io);
             if(userList.length < 2 && gameState==true){
                 io.emit(commends.newMsg, {data : {...notice.freeNotice, text: `게임이 종료되었습니다.`}});
-                if(userList.length < 2){
-                    io.to(socket.id).emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 시작됩니다.`}})
-                }
+                io.emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 시작됩니다.`}})
                 gameEnd(io);
             }
         });
