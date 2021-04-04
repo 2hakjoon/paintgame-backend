@@ -93,6 +93,9 @@ export const socketController = (socket, io) => {
         })
         socket.emit(commends.nicknameConfirm, color);
         socket.broadcast.emit(commends.playerUpdate, {data : {...notice.freeNotice, text: `${userId}님이 입장하셨습니다.`}})
+        if(userList.length < 2){
+            io.to(socket.id).emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 시작됩니다.`}})
+        }
         scoreBoard(io);
         
         setTimeout(()=>gameStart(io), 500);

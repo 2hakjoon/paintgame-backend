@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "babel-node src/index ",
     "start-dev": "nodemon --exec babel-node src/index.js --watch src/",
-    "heroku" : "git push heroku HEAD:master"
+    "heroku" : "git push heroku main"
   },
   "repository": {
     "type": "git",
