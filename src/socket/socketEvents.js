@@ -6,6 +6,7 @@ import { notice } from "./gameNotice";
 
 
 let gameState = false;
+let blockAnswer = false;
 let userList = [];
 let word = "";
 
@@ -25,7 +26,7 @@ const gameEnd = (io, user) => {
     io.emit(commends.countDown, ``)
     io.emit(commends.painterNotif, ``)
     if(user!==undefined){
-        io.emit(commends.newMsg, {data : {...notice.answered, text: `${user}님이 정답을 맞추셨습니다!` }});
+        io.emit(commends.newMsg, {data : {...notice.answered, text: `${user}님이 맞추셨습니다!` }});
     }
     io.emit(commends.gameEnded, ``);
     scoreBoard(io);
@@ -73,6 +74,7 @@ const selcetPainter = (io) => {
                 io.to(user.socket).emit(commends.disablePaint, ``);
             }
         })
+        blockAnswer = false;
     }
 }
 
@@ -94,7 +96,7 @@ export const socketController = (socket, io) => {
         socket.emit(commends.nicknameConfirm, color);
         socket.broadcast.emit(commends.playerUpdate, {data : {...notice.freeNotice, text: `${userId}님이 입장하셨습니다.`}})
         if(userList.length < 2){
-            io.to(socket.id).emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 시작됩니다.`}})
+            io.to(socket.id).emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 합니다.`}})
         }
         scoreBoard(io);
         
@@ -113,7 +115,7 @@ export const socketController = (socket, io) => {
             scoreBoard(io);
             if(userList.length < 2 && gameState==true){
                 io.emit(commends.newMsg, {data : {...notice.freeNotice, text: `게임이 종료되었습니다.`}});
-                io.emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 시작됩니다.`}})
+                io.emit(commends.newMsg, {data : {...notice.freeNotice, text: `최소 2명이 접속해야 합니다.`}})
                 gameEnd(io);
             }
         });
@@ -132,7 +134,8 @@ export const socketController = (socket, io) => {
     });
     socket.on(commends.sendMsg, (data)=>{
         socket.broadcast.emit(commends.newMsg, {data})
-        if(word === data.text){
+        if((word === data.text) && blockAnswer === false){
+            blockAnswer = true;
             userList.map((user)=>{
                 if(user.userId === data.user){
                     user.score = user.score + 10;

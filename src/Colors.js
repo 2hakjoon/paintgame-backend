@@ -16,6 +16,7 @@ export const rndColor = () => {
         color = pickColor();
         check = usedColor.includes(color)
     }
+    usedColor.push(color);
     return color;
 }
 
