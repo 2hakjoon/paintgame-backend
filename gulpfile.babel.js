@@ -16,7 +16,7 @@ const routes = {
     pug : {
         watch : "views/*",
         src:"views/*.pug",
-        dest : "build"
+        dest : "build/html"
     },
     img:{
         src: "src/img/*",

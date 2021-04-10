@@ -5,16 +5,20 @@ import socketIO from 'socket.io';
 import logger from 'morgan';
 import cors from 'cors';
 import {socketController} from './socket/socketEvents';
+import { join } from 'path';
 
 // localhost 포트 설정
 const port = process.env.PORT || 80;
 
 const app = express();
+app.set('view engine', 'pug');
+
+app.use(express.static(join(__dirname, "../build")));
 app.use(cors());
 app.use(logger('dev'));
 
 app.get('/', (req, res) => {
-  res.render('../../build/index.html');
+  res.render('index');
 });
 
 // server instance
