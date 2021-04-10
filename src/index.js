@@ -4,19 +4,17 @@ import http from 'http';
 import socketIO from 'socket.io';
 import logger from 'morgan';
 import cors from 'cors';
-import commend from './socket/commend';
 import {socketController} from './socket/socketEvents';
 
 // localhost 포트 설정
 const port = process.env.PORT || 80;
 
 const app = express();
-app.set("view engine", "pug");
 app.use(cors());
 app.use(logger('dev'));
 
 app.get('/', (req, res) => {
-  res.send('here is back end :(');
+  res.render('../../build/index.html');
 });
 
 // server instance

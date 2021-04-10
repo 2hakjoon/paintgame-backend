@@ -14,8 +14,8 @@ sass.compiler = require("node-sass");
 
 const routes = {
     pug : {
-        watch : "src/**/*.pug",
-        src:"src/*.pug",
+        watch : "views/*",
+        src:"views/*.pug",
         dest : "build"
     },
     img:{
@@ -24,12 +24,12 @@ const routes = {
     },
     scss:{
         watch:"src/scss/**/*.scss",
-        src: "src/scss/styles.scss",
+        src: "src/scss/index.scss",
         dest: "build/css",
     },
     js : {
         watch : "src/js/**/*.js",
-        src: "src/index.js",
+        src: "src/js/main.js",
         dest: "build/js"
     }
 }
@@ -43,7 +43,7 @@ const webserver = () => {
     .pipe(ws({livereload:true, open:true}))
 };
 
-const js = () => gulp.src(routes.js.src, {allowEmpty:true}).pipe(brom({
+const js = () => gulp.src(routes.js.src).pipe(brom({
     transform : [
         babelify.configure({ presets : ['@babel/preset-env']}),
         ["uglifyify", {global:true}]
@@ -57,7 +57,7 @@ const img = () =>
 
 
 const styles = () => 
-    gulp.src(routes.scss.src, {allowEmpty:true})
+    gulp.src(routes.scss.src)
     .pipe(sass().on("error", sass.logError))
     .pipe(autop())
     .pipe(miniCSS())
@@ -78,4 +78,3 @@ const assets = gulp.series([pug, styles, js]);
 const postDev = gulp.series([webserver, watch]);
 
 export const dev = gulp.series([prepare, assets, postDev]);
-export const build = gulp.series();
